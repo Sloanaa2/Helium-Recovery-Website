@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="us-ascii">
+	<title>UIUC Helium Recovery</title>
+	<link href='index.css' rel='stylesheet'>
+</head>
+<body>
+    
+<nav class ='navbar'><img src="IllinoisI.png" alt="I" id="I" width="31.58px" height="40px"><a href="index.html" class="active"> <ion-icon name="navigate-outline" width="20px" height="20px"></ion-icon> Select </a><a href="differences.html"> <ion-icon name="stats-chart-outline" width="20px" height="20px"></ion-icon> Differences </a><a href="totals.html"> <ion-icon name="bar-chart-outline" width="20px" height="20px"></ion-icon> Totals </a><a href="documents.html"> <ion-icon name="document-outline" width="20px" height="20px"></ion-icon> Documents </a></nav>
+
+<h2>Welcome to the UIUC helium recovery page!</h2>
+<p>To get started, please select if you would like to look at readouts from helium gas meters, humidity sensors, or pressure sensors. Then, select which location you would like to see. Lastly, select which dates you would like to look at. If you select two dates, a png will be created with all the data between those dates. If you would like to look at only one date, you may put the date into either box, or both. If you select dates that don't correspond to the png that is pulled up, that means there was no data for the dates you selected.</p>
+
+<div class='container'>
+    <div class='item1'>
+    
+
+
+        <p id="p1"><label for="sensor">Pick what you want to see:</label>  <select id="sensor" onchange="meterdropdown()"><option style="display:none;"></option><option value="meterReadings">Meters</option><option value="humidityReadings">Humidity</option><option value="pressureReadings">Pressure</option></select></p>
+        
+        <p id="p2"><label for="meters">Pick a meter:</label>  <select id="meters" name="meters"><option disabled="disabled" selected="selected" value=""></option></select></p>
+        
+        <p id="p3"><label for="startdate">Pick a start and end date:</label>  <input id="startdate" type="date" /> <input id="enddate" type="date" />
+        &nbsp;</p>
+        
+        
+        <p><input id="submit" onclick="showAllCsv()" type="submit" /><a hidden="" id="csv">Download CSV</a></p>
+        
+        <p></p>
+        
+        <p hidden="" id="nodata"></p>
+        
+        <p><img id="png" /></p>
+        
+        <p id="main"></p>
+        
+    </div>
+    <div class='item2'>
+        
+        <button id = "add" onclick = "addMeter()"> Add Meter +</button>
+        
+        <p id="p12" hidden><label for="sensor2">Pick what you want to see:</label>  <select id="sensor2" onchange="meterdropdown2()"><option style="display:none;" value='none'></option><option value="meterReadings">Meters</option><option value="humidityReadings">Humidity</option><option value="pressureReadings">Pressure</option></select><button id="xButton" onclick="exit()">X</button></p>
+        
+        <p id="p22" hidden><label for="meters2">Pick a meter:</label>  <select id="meters2" name="meters2"><option disabled="disabled" selected="selected" value='none'></option></select></p>
+        
+        <p id="p32" hidden><label for="startdate2">Pick a start and end date:</label>  <input id="startdate2" type="date" /> <input id="enddate2" type="date" />
+        
+        <p><a hidden="" id="csv2">Download CSV</a></p>
+        
+        <p></p>
+        
+        <p hidden="" id="nodata2"></p>
+        
+        <p><img id="png2" /></p>
+        
+        <p id="main2"></p>
+        
+        
+    </div>
+</div>    
+
+
+
+<p><br></p>
+
+<script type="text/javascript">
+function addMeter() {
+    const add = document.getElementById("add");
+    const p12 = document.getElementById("p12");
+    const p22 = document.getElementById("p22");
+    const p32 = document.getElementById("p32");
+    const main2 = document.getElementById("main2");
+    add.hidden = true;
+    p12.hidden = false;
+    p22.hidden = false;
+    p32.hidden = false;
+    main2.hidden = false;
+    
+    document.getElementById("startdate2").type = 'date'; //set dates back to date type
+    document.getElementById("startdate2").value = ''; //have to clear value
+    document.getElementById("enddate2").type = 'date';
+    document.getElementById("enddate2").value = '';
+}    
+</script>
+
+<script type= "text/javascript">
+function exit() {
+    const add = document.getElementById("add");
+    const p12 = document.getElementById("p12");
+    const p22 = document.getElementById("p22");
+    const p32 = document.getElementById("p32");
+    const csv2 = document.getElementById("csv2");
+    const nodata2 = document.getElementById("nodata2");
+    const png2 = document.getElementById("png2");
+    const main2 = document.getElementById("main2");
+    add.hidden = false;
+    p12.hidden = true;
+    p22.hidden = true;
+    p32.hidden = true;
+    csv2.hidden = true;
+    nodata2.hidden = true;
+    png2.hidden = true; 
+    main2.hidden = true;
+    main2.innerHTML = '';
+    document.getElementById("sensor2").value = 'none';
+    document.getElementById("meters2").value = 'none';
+    
+    document.getElementById("startdate2").type = 'reset'; //reset dates
+    document.getElementById("enddate2").type = 'reset';
+}
+
+</script>
+<script type="text/javascript">
+function showAllCsv() {
+    showcsvpng(document.getElementById("p3"), document.getElementById("nodata"), document.getElementById("sensor").value, document.getElementById("meters").value,  //Graph/meter 1
+                document.getElementById("csv"), document.getElementById("png"), document.getElementById("main"), document.getElementById("startdate").value, document.getElementById("enddate").value);
+                
+                
+    if(document.getElementById("add").hidden == true) { //this is saying if "add meter + is still there or not"           
+        showcsvpng(document.getElementById("p32"), document.getElementById("nodata2"), document.getElementById("sensor2").value, document.getElementById("meters2").value, //graph meter 2
+                    document.getElementById("csv2"), document.getElementById("png2"), document.getElementById("main2"), document.getElementById("startdate2").value, document.getElementById("enddate2").value);
+    }
+}    
+    
+</script>
+
+<script type="text/javascript">
+function meterdropdown(){
+    const sensor = document.getElementById("sensor").value;
+    const dropdown = document.getElementById("meters");
+    if (sensor === "meterReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. 103 Loomis">01. 103 Loomis</option><option value="02. 1st Floor SE Stairs Loomis">02. 1st Floor SE Stairs Loomis</option><option value="03. 171 Loomis">03. 171 Loomis</option><option value="04. 2nd Floor NE Stairs Loomis">04. 2nd Floor NE Stairs Loomis</option><option value="05. 175 Loomis">05. 175 Loomis</option><option value="06. 190A Liquifier Storage">06. 190A Liquifier Storage</option><option value="07. B10 Loomis">07. B10 Loomis</option><option value="08. B71 Loomis">08. B71 Loomis</option><option value="09. 496 Loomis">09. 496 Loomis</option><option value="11. 3rd Floor NW Stairs Loomis">11. 3rd Floor NW Stairs Loomis</option><option value="12. B88 MRL">12. B88 MRL</option><option value="13. B46 MRL">13. B46 MRL</option><option value="14. B88 MRL">14. B88 MRL</option><option value="15. 119 MRL">15. 119 MRL</option><option value="16. 226 MRL">16. 226 MRL</option><option value="17. 328 MRL">17. 328 MRL</option><option value="18. 424 MRL">18. 424 MRL</option><option value="19. 271 Loomis">19. 271 Loomis</option><option value="20. B19 SuperCon">20. B19 SuperCon</option><option value="22. 159 MRL">22. 159 MRL</option><option value="23. 5101 ESB">23. 5101 ESB</option><option value="24. B89 MRL">24. B89 MRL</option><option value="25. 295 ESB">25. 295 ESB</option><option value="26. 410 MRL">26. 410 MRL</option><option value="27. A101 CLSL">27. A101 CLSL</option><option value="28. B71 Loomis">28. B71 Loomis</option><option value="29. 244 MRL">29. 244 MRL</option><option value="30. 326 MRL">30. 326 MRL</option><option value="31. 458 MRL">31. 458 MRL</option><option value="32. 489 MRL">32. 489 MRL</option><option value="33. 148 MRL">33. 148 MRL</option><option value="34. B10 Loomis">34. B10 Loomis</option><option value="35. 100 NPL">35. 100 NPL</option><option value="36. 471 Loomis">36. 471 Loomis</option>'
+    } else if (sensor === "humidityReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. B71 Loomis">01. B71 Loomis</option><option value="02. 271 Loomis">02. 271 Loomis</option>'
+    } else if (sensor === "pressureReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. 271 Loomis">01. 271 Loomis</option><option value="02. 171 Loomis">02. 171 Loomis</option>'
+    };
+};
+
+function meterdropdown2(){
+    const sensor = document.getElementById("sensor2").value;
+    const dropdown = document.getElementById("meters2");
+    if (sensor === "meterReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. 103 Loomis">01. 103 Loomis</option><option value="02. 1st Floor SE Stairs Loomis">02. 1st Floor SE Stairs Loomis</option><option value="03. 171 Loomis">03. 171 Loomis</option><option value="04. 2nd Floor NE Stairs Loomis">04. 2nd Floor NE Stairs Loomis</option><option value="05. 175 Loomis">05. 175 Loomis</option><option value="06. 190A Liquifier Storage">06. 190A Liquifier Storage</option><option value="07. B10 Loomis">07. B10 Loomis</option><option value="08. B71 Loomis">08. B71 Loomis</option><option value="09. 496 Loomis">09. 496 Loomis</option><option value="11. 3rd Floor NW Stairs Loomis">11. 3rd Floor NW Stairs Loomis</option><option value="12. B88 MRL">12. B88 MRL</option><option value="13. B46 MRL">13. B46 MRL</option><option value="14. B88 MRL">14. B88 MRL</option><option value="15. 119 MRL">15. 119 MRL</option><option value="16. 226 MRL">16. 226 MRL</option><option value="17. 328 MRL">17. 328 MRL</option><option value="18. 424 MRL">18. 424 MRL</option><option value="19. 271 Loomis">19. 271 Loomis</option><option value="20. B19 SuperCon">20. B19 SuperCon</option><option value="22. 159 MRL">22. 159 MRL</option><option value="23. 5101 ESB">23. 5101 ESB</option><option value="24. B89 MRL">24. B89 MRL</option><option value="25. 295 ESB">25. 295 ESB</option><option value="26. 410 MRL">26. 410 MRL</option><option value="27. A101 CLSL">27. A101 CLSL</option><option value="28. B71 Loomis">28. B71 Loomis</option><option value="29. 244 MRL">29. 244 MRL</option><option value="30. 326 MRL">30. 326 MRL</option><option value="31. 458 MRL">31. 458 MRL</option><option value="32. 489 MRL">32. 489 MRL</option><option value="33. 148 MRL">33. 148 MRL</option><option value="34. B10 Loomis">34. B10 Loomis</option><option value="35. 100 NPL">35. 100 NPL</option><option value="36. 471 Loomis">36. 471 Loomis</option>'
+    } else if (sensor === "humidityReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. B71 Loomis">01. B71 Loomis</option><option value="02. 271 Loomis">02. 271 Loomis</option>'
+    } else if (sensor === "pressureReadings") {
+        dropdown.innerHTML = '<option style="display:none;"></option><option value="01. 271 Loomis">01. 271 Loomis</option><option value="02. 171 Loomis">02. 171 Loomis</option>'
+    };
+};
+
+</script><script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script>
+function showcsvpng(p3, no_data, sensor_val, meter_val, csv, png, main1, startdate1, startdate2) { //VARIABLES CANNOT HAVE THE SAME NAME AS INSIDE FUNCTION
+    const element = p3;
+    const nodata = no_data;
+    const firstdropdown = sensor_val;
+    const seconddropdown = meter_val;
+    const a = csv;
+    const img = png;
+    const main = main1;
+    var startdate = startdate1;
+    var enddate = startdate2;
+    
+        
+    nodata.hidden = true;
+    a.hidden = true;
+    img.hidden = true;
+    a.removeAttribute('href')
+    img.removeAttribute('src')
+    main.innerHTML = ' ';
+    
+    var today = new Date();
+    let y = String(today.getUTCFullYear()).substring(2,4);
+    let m = String(today.getUTCMonth()+1);
+    if (m < 10) {
+        m = '0'.concat(m)
+    };
+    let d = String(today.getUTCDate());
+    if (d < 10) {
+        d = '0'.concat(d)
+    };
+
+    var n1 = new Date(startdate);
+    let y1 = String(n1.getUTCFullYear()).substring(2,4);
+    let m1 = String(n1.getUTCMonth()+1);
+    if (m1 < 10) {
+        m1 = '0'.concat(m1)
+    };
+    let d1 = String(n1.getUTCDate());
+    if (d1 < 10) {
+        d1 = '0'.concat(d1)
+    };
+
+    var n2 = new Date(enddate);
+    let y2 = String(n2.getUTCFullYear()).substring(2,4);
+    let m2 = String(n2.getUTCMonth()+1);
+    if (m2 < 10) {
+        m2 = '0'.concat(m2)
+    };
+    let d2 = String(n2.getUTCDate());
+    if (d2 < 10) {
+        d2 = '0'.concat(d2)
+    };
+
+    var CSVs = ''
+    var sensor = ''
+    if(firstdropdown === 'meterReadings'){
+        CSVs = 'meterCSVs'
+        sensor = 'Meter'
+    }else if(firstdropdown === 'humidityReadings'){
+        CSVs = 'humidityCSVs'
+        sensor = 'Humidity'
+    }else if(firstdropdown === 'pressureReadings'){
+        CSVs = 'pressureCSVs'
+        sensor = 'Pressure'
+    };
+
+    const startdatepng = 'helium/' + firstdropdown + '/' + seconddropdown + '/' + CSVs + '/' + seconddropdown + ' ' + y1 + '-' + m1 + '-' + d1 + '.csv'
+    const enddatepng = 'helium/' + firstdropdown + '/' + seconddropdown + '/' + CSVs + '/' + seconddropdown + ' ' + y2 + '-' + m2 + '-' + d2 + '.csv'
+
+    function fileExists(url) {
+        if(url){
+            if(url.slice(-11,-4) !== 'NaN-NaN') {
+                var req = new XMLHttpRequest();
+                req.open('GET', url, false);
+                req.send();
+                if(req.status === 200 || req.status === 304) {
+                    return 'EXISTS';
+                } else if(req.status === 500) {
+                    return 'DNE'
+                };
+            } else {
+                return 'NAN'  
+            };
+        };
+    };
+
+    var startstatus = fileExists(startdatepng);
+    var endstatus = fileExists(enddatepng);
+    
+    function runPython(start,end,title) {
+        const xhr = new XMLHttpRequest();
+        const url = 'cgi-bin/selectAnalysis.py';
+        const data = JSON.stringify({"variables": firstdropdown + "," + seconddropdown + "," + start + "," + end});
+
+        xhr.open('POST', url, true);
+
+        img.src = 'balloon.gif';
+        img.height = 480;
+        img.hidden = false;
+
+        xhr.setRequestHeader('Content-type', 'text/x-python');
+
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+
+                var status = xhr.status;
+                if (status === 200) {
+                    var imgstatus = fileExists('pngs/' + sensor + ' ' + seconddropdown + ' ' + title + '.png')
+                    if(imgstatus === 'EXISTS'){
+                        img.src = 'pngs/' + sensor + ' ' + seconddropdown + ' ' + title + '.png';
+                        a.href = 'csvs/' + sensor + ' ' + seconddropdown + ' ' + title + '.csv'
+                        img.height = 480;
+                        img.hidden = false;
+                        a.hidden = false;
+                   
+                       $.ajax({
+                            url: 'csvs/' + sensor + ' ' + seconddropdown + ' ' + title + '.csv',
+                            dataType: 'text',
+                        }).done(successFunction);
+        
+                    } else {
+                        img.src = 'nodata.png';
+                        img.height = 228;
+                        img.hidden = false;
+                        nodata.innerHTML = 'There is no data for this time period.';
+                        nodata.hidden = false;
+                    };
+                };
+            };
+        };
+
+        xhr.send(data);
+        return xhr;
+    };
+
+    if((startstatus === 'EXISTS' || startstatus === 'DNE') && (endstatus === 'EXISTS' || endstatus === 'DNE')) {
+        if(n2.getTime() >= n1.getTime()){
+            var startdate = y1 + "-" + m1 + "-" + d1;
+            var enddate = y2 + "-" + m2 + "-" + d2;
+            var name = ''
+            if(startdate === enddate) {
+                name = 'on ' + startdate;
+            } else {
+                name = 'from ' + startdate + ' to ' + enddate;
+            };
+            runPython(startdate,enddate,name);
+        } else {
+            img.src = 'nodata.png';
+            img.height = 228;
+            img.hidden = false;
+            nodata.innerHTML = 'Please select dates in order.';
+            nodata.hidden = false;
+        };
+    } else if(startstatus === 'EXISTS' && endstatus === 'NAN') {
+        var startdate = y1 + "-" + m1 + "-" + d1;
+        var enddate = y1 + "-" + m1 + "-" + d1;
+        var name = 'on ' + startdate;
+        runPython(startdate,enddate,name);
+    } else if(startstatus === 'NAN' && endstatus === 'EXISTS') {
+        var startdate = y2 + "-" + m2 + "-" + d2;
+        var enddate = y2 + "-" + m2 + "-" + d2;
+        var name = 'on ' + startdate;
+        runPython(startdate,enddate,name);
+    } else if((startstatus === 'DNE' && endstatus === 'NAN') || (startstatus === 'NAN' && endstatus === 'DNE')) {
+        img.src = 'nodata.png';
+        img.height = 228;
+        img.hidden = false;
+        nodata.innerHTML = 'There is no data for this time period.';
+        nodata.hidden = false;
+    } else {
+        img.src = 'nodata.png';
+        img.height = 228;
+        img.hidden = false;
+        nodata.innerHTML = 'Please select dates.';
+        nodata.hidden = false;
+    }
+    
+    function successFunction(data) {
+        var allRows = data.split(/\r?\n|\r/);
+        var table = '<table>';
+        for (var singleRow = 0; singleRow < allRows.length - 1; singleRow++) {
+            if (singleRow === 0) {
+                table += '<thead>';
+                table += '<tr>';
+            } 
+            else {
+                table += '<tr>';
+            };
+            var rowCells = allRows[singleRow].split(',');
+            for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
+                if (singleRow === 0) {
+                    table += '<th>';
+                    table += rowCells[rowCell];
+                    table += '</th>';
+                } else {
+                    table += '<td>';
+                    table += rowCells[rowCell];
+                    table += '</td>';
+                };
+            };
+            if (singleRow === 0) {
+                table += '</tr>';
+                table += '</thead>';
+                table += '<tbody>';
+            } else {
+                table += '</tr>';
+            };
+        }; 
+        table += '</tbody>';
+        table += '</table>';
+        main.innerHTML = table;
+    };
+    
+};
+
+</script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+</html>

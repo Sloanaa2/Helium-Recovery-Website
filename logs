@@ -1,0 +1,214 @@
+<div class="demo" >
+<style type="text/css"> .demo { margin: 30px ; color : #aaaaaa; font-family : arial sans-serif ;font-size : 10pt }
+                            p { color : #ff4500; font-size : 14pt }
+
+
+.axis {
+      font: 10px sans-serif;
+	}
+
+	.axis path,
+	.axis line {
+	  fill: none;
+	  stroke: #000;
+	  shape-rendering: crispEdges;
+	}
+</style>
+<link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/cupertino/jquery-ui.css">
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+<h1>Helium Readings</h1>
+
+<p> Please select the meter </p>
+<form>
+<select id="meterReading">
+<option value="1-readings"> Meter 1 </option>
+<option value="2-readings"> Meter 2 </option>
+<option value="3-readings"> Meter 3 </option>
+<option value="4-readings"> Meter 4 </option>
+<option value="5-readings"> Meter 5 </option>
+<option value="6-readings"> Meter 6 </option>
+<option value="7-readings"> Meter 7 </option>
+<option value="8-readings"> Meter 8 </option>
+<option value="9-readings"> Meter 9 </option>
+<option value="10-readings"> Meter 10 </option>
+<option value="11-readings"> Meter 11 </option>
+<option value="12-readings"> Meter 12 </option>
+<option value="13-readings"> Meter 13 </option>
+<option value="14-readings"> Meter 14 </option>
+<option value="15-readings"> Meter 15 </option>
+<option value="16-readings"> Meter 16 </option>
+<option value="17-readings"> Meter 17 </option>
+<option value="18-readings"> Meter 18 </option>
+<option value="19-readings"> Meter 19 </option>
+<option value="20-readings"> Meter 20 </option>
+<option value="21-readings"> Meter 21 </option>
+<option value="22-readings"> Meter 22 </option>
+<option value="23-readings"> Meter 23 </option>
+<option value="24-readings"> Meter 24 </option>
+<option value="25-readings"> Meter 25 </option>
+<option value="26-readings"> Meter 26 </option>
+<option value="27-readings"> Meter 27 </option>
+<option value="28-readings"> Meter 28 </option>
+<option value="29-readings"> Meter 29 </option>
+<option value="30-readings"> Meter 30 </option>
+<option value="31-readings"> Meter 31 </option>
+<option value="32-readings"> Meter 32 </option>
+<option value="33-readings"> Meter 33 </option>
+<option value="34-readings"> Meter 34 </option>
+</select>
+</form>
+
+<p>Please select a date below </p>
+
+click here : <input type="text" name="date_1" id="datepicker_1" /> <input type="text" name="date_1" id="datepicker_2" />
+<input id = "submitbtn" type="submit" onclick="showCharts()">
+<div id="header"></div>
+
+<script>
+    $( "#datepicker_1" ).datepicker({
+      altFormat: "DD, d MM, yy",
+      showWeek: true,
+      firstDay: 1,
+     });
+$( "#datepicker_2" ).datepicker({
+      altFormat: "DD, d MM, yy",
+      showWeek: true,
+      firstDay: 1,
+     });
+    showCharts = function () {
+        $.ajax({
+            url: "/getChartData?meter="+$("#meterReading" ).val()+"&date_1="+$("#datepicker_1").val()+"&date_2="+$("#datepicker_2").val(),
+            success: function(result){
+                console.log(result)
+                $( ".img" ).empty();
+                $("#header").empty()
+                var img = document.createElement("img");
+                img.src = result;
+                img.width = "500"
+                img.onerror = onError
+                img.height = "500"
+                var src = document.getElementById("header");
+                src.appendChild(img);
+            },
+            failure: function (error) {
+                console.log(error)
+            } });
+
+        $.ajax({
+        type: "GET",
+        url: "/printChartData?meter="+$("#meterReading" ).val()+"&date_1="+$("#datepicker_1").val()+"&date_2="+$("#datepicker_2").val(),
+        success: function (data) {
+            $(".csv").empty();
+            $("#header").append(data);
+        }
+    });
+    }
+    function onError() {
+            $( ".img" ).empty();
+            $("#header").empty()
+
+            var img = document.createElement("img");
+            img.src = "/static/nohelium.jpg";
+            img.width = "500"
+            img.height = "500"
+            var src = document.getElementById("header");
+            src.appendChild(img);
+    }
+</script>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/4.1.2/papaparse.js"></script>
+<script>
+    // function arrayToTable(tableData) {
+    //     var table = $('<table></table>');
+    //     $(tableData).each(function (i, rowData) {
+    //         var row = $('<tr></tr>');
+    //         $(rowData).each(function (j, cellData) {
+    //             row.append($('<td>'+cellData+'</td>'));
+    //         });
+    //         table.append(row);
+    //     });
+    //     return table;
+    // }
+
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+
+<script>
+
+var margin = {top: 20, right: 20, bottom: 70, left: 40},
+    width = 600 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+
+// Parse the date / time
+var	parseDate = d3.time.format("%Y-%m").parse;
+
+var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+
+var y = d3.scale.linear().range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickFormat(d3.time.format("%Y-%m"));
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(10);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform",
+          "translate(" + margin.left + "," + margin.top + ")");
+
+d3.csv("/static/data/bar-data.csv", function(error, data) {
+
+    data.forEach(function(d) {
+        d.date = parseDate(d.date);
+        d.value = +d.value;
+    });
+
+  x.domain(data.map(function(d) { return d.date; }));
+  y.domain([0, d3.max(data, function(d) { return d.value; })]);
+
+  svg.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+    .selectAll("text")
+      .style("text-anchor", "end")
+      .attr("dx", "-.8em")
+      .attr("dy", "-.55em")
+      .attr("transform", "rotate(-90)" );
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis)
+    .append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Value ($)");
+
+  svg.selectAll("bar")
+      .data(data)
+    .enter().append("rect")
+      .style("fill", "steelblue")
+      .attr("x", function(d) { return x(d.date); })
+      .attr("width", x.rangeBand())
+      .attr("y", function(d) { return y(d.value); })
+      .attr("height", function(d) { return height - y(d.value); });
+
+});
+
+</script>
+
+</div>

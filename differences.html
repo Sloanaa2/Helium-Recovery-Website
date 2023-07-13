@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="us-ascii">
+	<title>UIUC Helium Recovery</title>
+	<link href='index.css' rel='stylesheet'>
+</head>
+<body onload='daysOfMonth()'>
+
+<nav class ='navbar'><img src="IllinoisI.png" alt="I" id="I" width="31.58px" height="40px"><a href="index.html"> <ion-icon name="navigate-outline" width="20px" height="20px"></ion-icon> Select </a><a href="differences.html" class='active'> <ion-icon name="stats-chart-outline" width="20px" height="20px"></ion-icon> Differences </a><a href="totals.html"> <ion-icon name="bar-chart-outline" width="20px" height="20px"></ion-icon> Totals </a><a href="documents.html"> <ion-icon name="document-outline" width="20px" height="20px"></ion-icon> Documents </a></nav>
+
+<h2>Welcome to the UIUC helium recovery page!</h2>
+<p>To get started, please select if you would like to see the total differences, or differences on meter 19. Then, select which dates you would like to look at. If you select two dates, a png will be created with all the data between those dates. If you would like to look at only one date, you may put the date into either box, or both. If you select dates that don't correspond to the png that is pulled up, that means there was no data for the dates you selected. The difference files are generated at the end of the day, so you will not be able to see any data for today. Please select yesterday's date, or any date before that.</p>
+
+<p id="p1">
+    <label for="meters">Pick what you want to see:</label> <select id="meters"><option style="display:none;"></option><option value="19">Meter 19 differences</option><option value="total">Total differences</option> </select>
+</p>
+
+        <div class="calendar">
+            <div class="header">
+                <ion-icon name="arrow-back-outline" class='arrows' onclick="leftArrow()">arrow</ion-icon>
+                <div class="date">
+                    <h3 id="month">April</h3>
+                    <h3 id="year">2023</h3>
+                </div>
+                <ion-icon name="arrow-forward-outline" class='arrows' onclick="rightArrow()">arrow</ion-icon>
+            </div>
+            <div class = 'days'>
+                    <p class="dow">Sun</p>
+                    <p class="dow">Mon</p>
+                    <p class="dow">Tue</p>
+                    <p class="dow">Wed</p>
+                    <p class="dow">Thu</p>
+                    <p class="dow">Fri</p>
+                    <p class="dow">Sat</p>
+                        <p id="spot0" onclick="clicked(id)">0</p>
+                        <p id="spot1" onclick="clicked(id)">1</p>
+                        <p id="spot2" onclick="clicked(id)">2</p>
+                        <p id="spot3" onclick="clicked(id)">3</p>
+                        <p id="spot4" onclick="clicked(id)">4</p>
+                        <p id="spot5" onclick="clicked(id)">5</p>
+                        <p id="spot6" onclick="clicked(id)">6</p>
+                        <p id="spot7" onclick="clicked(id)">7</p>
+                        <p id="spot8" onclick="clicked(id)">8</p>
+                        <p id="spot9" onclick="clicked(id)">9</p>
+                        <p id="spot10" onclick="clicked(id)">10</p>
+                        <p id="spot11" onclick="clicked(id)">11</p>
+                        <p id="spot12" onclick="clicked(id)">12</p>
+                        <p id="spot13" onclick="clicked(id)">13</p>
+                        <p id="spot14" onclick="clicked(id)">14</p>
+                        <p id="spot15" onclick="clicked(id)">15</p>
+                        <p id="spot16" onclick="clicked(id)">16</p>
+                        <p id="spot17" onclick="clicked(id)">17</p>
+                        <p id="spot18" onclick="clicked(id)">18</p>
+                        <p id="spot19" onclick="clicked(id)">19</p>
+                        <p id="spot20" onclick="clicked(id)">20</p>
+                        <p id="spot21" onclick="clicked(id)">21</p>
+                        <p id="spot22" onclick="clicked(id)">22</p>
+                        <p id="spot23" onclick="clicked(id)">23</p>
+                        <p id="spot24" onclick="clicked(id)">24</p>
+                        <p id="spot25" onclick="clicked(id)">25</p>
+                        <p id="spot26" onclick="clicked(id)">26</p>
+                        <p id="spot27" onclick="clicked(id)">27</p>
+                        <p class='last2' id="spot28" onclick="clicked(id)">28</p>
+                        <p class='last2' id="spot29" onclick="clicked(id)">29</p>
+                        <p class='last2' id="spot30" onclick="clicked(id)">30</p>
+                        <p class='last2' id="spot31" onclick="clicked(id)">31</p>
+                        <p class='last2' id="spot32" onclick="clicked(id)">32</p>
+                        <p class='last2' id="spot33" onclick="clicked(id)">33</p>
+                        <p class='last2' id="spot34" onclick="clicked(id)">34</p>
+                        <p class='last'  id="spot35" onclick="clicked(id)">35</p>
+                        <p class='last'  id="spot36" onclick="clicked(id)">36</p>
+                        <p class='last'  id="spot37" onclick="clicked(id)">37</p>
+                        <p class='last'  id="spot38" onclick="clicked(id)">38</p>
+                        <p class='last'  id="spot39" onclick="clicked(id)">39</p>
+                        <p class='last'  id="spot40" onclick="clicked(id)">40</p>
+                        <p class='last'  id="spot41" onclick="clicked(id)">41</p>
+                </div>
+        </div>
+
+<p id="p3">
+    <input id="submit" onclick="showcsvpng()" type="submit" />
+    <br />
+    <br />
+    <a hidden="" id="csv">Download CSV</a>
+</p>
+
+<p hidden="" id="nodata"></p>
+
+<p><img id="png" /></p>
+
+<p id="main"></p>
+
+<p><br></p>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+function showcsvpng() {
+    const element = document.getElementById("p3");
+    const nodata = document.getElementById("nodata");
+    const dropdown = document.getElementById("meters").value;
+    const a = document.getElementById("csv");
+    const img = document.getElementById("png");
+    const main = document.getElementById("main");
+    nodata.hidden = true;
+    a.hidden = true;
+    img.hidden = true;
+    img.removeAttribute('src')
+    main.innerHTML = ''
+    var n1;
+    var n2;
+    let y1;
+    let y2;
+    let m1;
+    let m2;
+    let d1;
+    let d2;
+    var startdate;
+    var enddate;
+    
+    if(sort_flag == 1) {
+        n1 = date1sort;
+        y1 = yearData[0]-2000;
+        m1 = monthData[0]+1;
+        if (m1 < 10) {
+            m1 = '0'.concat(m1)
+        };
+        console.log(y1)
+        console.log(m1)
+        d1 = startday[0];
+        // if (d1 < 10) {
+        //     d1 = '0'.concat(d1)
+        // };
+        console.log(d1)
+        
+        n2 = date2sort;
+        y2 = yearData[yearData.length-1]-2000;
+        m2 = monthData[monthData.length-1]+1;
+        if (m2 < 10) {
+            m2 = '0'.concat(m2)
+        };
+        console.log(y2)
+        console.log(m2)
+        d2 = endday[endday.length-1];
+        // if (d2 < 10) {
+        //     d2 = '0'.concat(d2)
+        // };
+        console.log(`This is day 2: ${d2}`)
+    }
+    else if(sort_flag == 2) {
+        n2 = date1sort;
+        y2 = yearData[0]-2000;
+        m2 = monthData[0]+1;
+        if (m2 < 10) {
+            m2 = '0'.concat(m2)
+        };
+        console.log(y2)
+        console.log(m2)
+        d2 = startday[0];
+        // if (d2 < 10) {
+        //     d2 = '0'.concat(d2)
+        // };
+        console.log(d2)
+        
+        n1 = date2sort;
+        y1 = yearData[yearData.length-1]-2000;
+        m1 = monthData[monthData.length-1]+1;
+        if (m1 < 10) {
+            m1 = '0'.concat(m1)
+        };
+        console.log(y1)
+        console.log(m1)
+        d1 = endday[endday.length-1];
+        // if (d1 < 10) {
+        //     d1 = '0'.concat(d1)
+        // };
+        console.log(d1);
+    }
+    else {
+        n1 = date1sort;
+        y1 = date1info[0]-2000
+        m1 = date1info[1]+1
+        if (m1 < 10) {
+            m1 = '0'.concat(m1)
+        };
+        d1 = date1value;
+        n2 = date1sort;
+        y2 = date1info[0]-2000
+        m2 = date1info[1]+1
+        if (m2 < 10) {
+            m2 = '0'.concat(m2)
+        };
+        d2 = date1value;
+        console.log('HERE')
+        console.log(n1)
+        console.log(y1)
+        console.log(m1)
+        console.log(d1)
+        console.log(n2)
+        console.log(y2)
+        console.log(m2)
+        console.log(d2)
+    }
+    
+    var CSVs = ''
+    var diff = ''
+    var file = ''
+    var begin = ''
+    var end = ''
+    if(dropdown === '19'){
+        CSVs = 'mrlCSVs'
+        diff = ' MRL difference'
+        file = 'MRL Differences'
+        begin = '-26'
+        end = '-19'
+    }else if(dropdown === 'total'){
+        CSVs = 'differenceCSVs'
+        diff = ' difference'
+        file = 'Differences'
+        begin = '-22'
+        end = '-15'
+    };
+
+    const startdatepng = 'helium/differences/' + CSVs + '/' + y1 + '-' + m1 + '-' + d1 + diff + '.csv'
+    const enddatepng = 'helium/differences/' + CSVs + '/' + y2 + '-' + m2 + '-' + d2 + diff + '.csv'
+
+    function fileExists(url) {
+        if(url){
+            if(url.slice(begin, end) !== 'NaN-NaN') {
+                var req = new XMLHttpRequest();
+                req.open('GET', url, false);
+                req.send();
+                if(req.status === 200 || req.status === 304) {
+                    return 'EXISTS';
+                } else if(req.status === 500) {
+                    return 'DNE'
+                };
+            } else {
+                return 'NAN'  
+            };
+        };
+    };
+
+    var startstatus = fileExists(startdatepng);
+    var endstatus = fileExists(enddatepng);
+    
+    function runPython(start,end,title) {
+        const xhr = new XMLHttpRequest();
+        const url = 'cgi-bin/differenceSelectAnalysis.py';
+        const data = JSON.stringify({"variables": dropdown + "," + start + "," + end});
+        xhr.open('POST', url, true);
+        img.src = 'balloon.gif';
+        img.height = 480;
+        img.hidden = false;
+
+        xhr.setRequestHeader('Content-type', 'text/x-python');
+
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState === XMLHttpRequest.DONE) {
+
+                var status = xhr.status;
+                if (status === 200) {
+                    var imgstatus = fileExists('pngs/' + file + ' ' + title + '.png')
+                    if(imgstatus === 'EXISTS'){
+                        img.src = 'pngs/' + file + ' ' + title + '.png';
+                        a.href = 'csvs/' + file + ' ' + title + '.csv'
+                        img.height = 480;
+                        img.hidden = false;
+                        a.hidden = false;
+                   
+                       $.ajax({
+                            url: 'csvs/' + file + ' ' + title + '.csv',
+                            dataType: 'text',
+                        }).done(successFunction);
+        
+                    } else {
+                        img.src = 'nodata.png';
+                        img.height = 228;
+                        img.hidden = false;
+                        nodata.innerHTML = 'There is no data for this time period.';
+                        nodata.hidden = false;
+                    };
+                };
+            };
+        };
+
+        xhr.send(data);
+        return xhr;
+    };
+
+    if((startstatus === 'EXISTS' || startstatus === 'DNE') && (endstatus === 'EXISTS' || endstatus === 'DNE') && dropdown != false) {
+        if(1) {
+            if(sort_flag == 1) {
+                startdate = y1 + "-" + m1 + "-" + d1;
+                enddate = y2 + "-" + m2 + "-" + d2;
+            }
+            else if(sort_flag == 2) {
+                startdate = y2 + "-" + m2 + "-" + d2;
+                enddate = y1 + "-" + m1 + "-" + d1;
+            }
+            else{
+                startdate = y1 + "-" + m1 + "-" + d1;
+                enddate = y2 + "-" + m2 + "-" + d2;
+            }
+            var name = ''
+            if(startdate === enddate) {
+                name = 'on ' + startdate;
+            } else {
+                name = 'from ' + startdate + ' to ' + enddate;
+            };
+            runPython(startdate,enddate,name);} 
+        else {
+            img.src = 'nodata.png';
+            img.height = 228;
+            img.hidden = false;
+            nodata.innerHTML = 'Please select dates in order.';
+            nodata.hidden = false;
+        };
+    } else if(startstatus === 'EXISTS' && endstatus === 'NAN') {
+        var startdate = y1 + "-" + m1 + "-" + d1;
+        var enddate = y1 + "-" + m1 + "-" + d1;
+        var name = 'on ' + startdate;
+        runPython(startdate,enddate,name);
+    } else if(startstatus === 'NAN' && endstatus === 'EXISTS') {
+        var startdate = y2 + "-" + m2 + "-" + d2;
+        var enddate = y2 + "-" + m2 + "-" + d2;
+        var name = 'on ' + startdate;
+        runPython(startdate,enddate,name);
+    } else if((startstatus === 'DNE' && endstatus === 'NAN') || (startstatus === 'NAN' && endstatus === 'DNE')) {
+        img.src = 'nodata.png';
+        img.height = 228;
+        img.hidden = false;
+        nodata.innerHTML = 'There is no data for this time period.';
+        nodata.hidden = false;
+    } else {
+        img.src = 'nodata.png';
+        img.height = 228;
+        img.hidden = false;
+        nodata.innerHTML = 'Please select dates.';
+        nodata.hidden = false;
+    }
+    console.log(startstatus)
+    console.log(endstatus)
+
+    /*var input = document.getElementById("dateinput").value;
+    var n = new Date(input);
+    let y = String(n.getUTCFullYear()).substring(2,4);
+    let m = String(n.getUTCMonth()+1);
+    if (m < 10) {
+        m = '0'.concat(m)
+    };
+    let d = String(n.getUTCDate());
+    if (d < 10) {
+        d = '0'.concat(d)
+    };*/
+
+    /*img.onload = function() {
+        if (img.getAttribute('src') === 'nodata.png') {
+            img.hidden = false;
+            nodata.innerHTML = 'There is no data for this day, please select another day.'
+            if (String(a.href.substr(-12,12)) === '-NaN-NaN.csv' || dropdown === '') {
+                nodata.innerHTML = 'Please fill out all the fields.'
+            };
+            nodata.hidden = false;
+            a.hidden = true;
+        } else {
+            img.hidden = false;
+            nodata.hidden = true;
+            a.hidden = false;
+      
+            if (dropdown === "19") {
+                var CSV = 'helium/differences/mrlCSVs/' + y + '-' + m + '-' + d + ' MRL difference.csv'
+            } else if (dropdown === "total") {
+                var CSV = 'helium/differences/differenceCSVs/' + y + '-' + m + '-' + d + ' difference.csv'
+            };
+            
+            $.ajax({
+                url: CSV,
+                dataType: 'text',
+            }).done(successFunction);
+        };
+    };
+
+    img.onerror = function(){img.onerror=null; img.src="nodata.png";}
+
+    if (dropdown === "19") {
+        img.src = 'helium/differences/mrlPNGs/'+y+'-'+m+'-'+d+' MRL difference.png';
+        a.href = 'helium/differences/mrlCSVs/'+y+'-'+m+'-'+d+' MRL difference.csv';
+        const CSV = 'helium/differences/mrlCSVs/' + y + '-' + m + '-' + d + ' MRL difference.csv';
+    } else if (dropdown === "total") {
+        img.src = 'helium/differences/differencePNGs/'+y+'-'+m+'-'+d+' difference.png';
+        a.href = 'helium/differences/differenceCSVs/'+y+'-'+m+'-'+d+' difference.csv';
+        const CSV = 'helium/differences/differenceCSVs/' + y + '-' + m + '-' + d + ' difference.csv';
+    };*/
+    
+    function successFunction(data) {
+        var allRows = data.split(/\r?\n|\r/);
+        var table = '<table>';
+        for (var singleRow = 0; singleRow < allRows.length - 1; singleRow++) {
+            if (singleRow === 0) {
+                table += '<thead>';
+                table += '<tr>';
+            } else {
+                table += '<tr>';
+            };
+            var rowCells = allRows[singleRow].split(',');
+            for (var rowCell = 0; rowCell < rowCells.length; rowCell++) {
+                if (singleRow === 0) {
+                    table += '<th>';
+                    table += rowCells[rowCell];
+                    table += '</th>';
+                } else {
+                    table += '<td>';
+                    table += rowCells[rowCell];
+                    table += '</td>';
+                };
+            };
+            if (singleRow === 0) {
+                table += '</tr>';
+                table += '</thead>';
+                table += '<tbody>';
+            } else {
+                table += '</tr>';
+            };
+        }; 
+        table += '</tbody>';
+        table += '</table>';
+        main.innerHTML = table;
+    };
+};
+
+</script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+  <script>const spots = ['spot0', 'spot1', 'spot2', 'spot3', 'spot4', 'spot5', 'spot6', 'spot7', 'spot8', 'spot9', 'spot10', 'spot11', 'spot12', 'spot13', 'spot14', 'spot15', 'spot16', 'spot17', 'spot18', 'spot19', 'spot20', 'spot21', 'spot22', 'spot23', 'spot24', 'spot25', 'spot26', 'spot27', 'spot28', 'spot29', 'spot30', 'spot31', 'spot32', 'spot33', 'spot34', 'spot35', 'spot36', 'spot37', 'spot38', 'spot39', 'spot40', 'spot41'];
+let date1;
+let date2;
+let numberOfClicked = 0;
+const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+let sort_flag = 0;
+let yearData = [];
+let monthData = [];
+let day1 = [];
+let day2 = [];
+let startday = [];
+let endday = [];
+let spot1;
+let spot2;
+let day1info;
+let day2info;
+
+function daysOfMonth() {
+    let d = new Date();
+    document.getElementById('month').innerHTML =  months[d.getMonth()];
+    document.getElementById('year').innerHTML = d.getFullYear();
+    update();
+}
+function rightArrow() {
+    month=document.getElementById('month').innerHTML;
+    year=document.getElementById('year').innerHTML;
+    console.log(month)
+    switch(month){
+    case 'January': month_num = 1;
+        break;
+    case 'February': month_num = 2;
+        break;
+    case 'March': month_num = 3;
+        break;
+    case 'April': month_num = 4;
+        break;
+    case 'May': month_num = 5;
+        break;
+    case 'June': month_num = 6;
+        break;
+    case 'July': month_num = 7;
+        break;
+    case 'August': month_num = 8;
+        break;
+    case 'September': month_num = 9;
+        break;
+    case 'October': month_num = 10;
+        break;
+    case 'November': month_num = 11;
+        break;
+    case 'December': month_num = 0;
+        year++;
+        break;
+    }
+    document.getElementById('month').innerHTML = months[month_num];
+    document.getElementById('year').innerHTML = year;
+    update();
+    monthSavings();
+}
+
+function leftArrow() {
+    month=document.getElementById('month').innerHTML;
+    year=document.getElementById('year').innerHTML;
+    console.log(month)
+    switch(month){
+    case 'January': month_num = 11;
+        year--;
+        break;
+    case 'February': month_num = 0;
+        break;
+    case 'March': month_num = 1;
+        break;
+    case 'April': month_num = 2;
+        break;
+    case 'May': month_num = 3;
+        break;
+    case 'June': month_num = 4;
+        break;
+    case 'July': month_num = 5;
+        break;
+    case 'August': month_num = 6;
+        break;
+    case 'September': month_num = 7;
+        break;
+    case 'October': month_num = 8;
+        break;
+    case 'November': month_num = 9;
+        break;
+    case 'December': month_num = 10;
+        break;
+    }
+    document.getElementById('month').innerHTML = months[month_num];
+    document.getElementById('year').innerHTML = year;
+    update();
+    monthSavings();
+}
+
+function update() {
+    month=document.getElementById('month').innerHTML
+    year=document.getElementById('year').innerHTML
+    year_12 = Math.floor((year-2000)/12)
+    year_addition = (year-2000)%12
+    leap_years = Math.floor(year_addition/4)
+    common_day = (year_12+year_addition+leap_years +2)%7 //add 2 for 2000
+    console.log(common_day)
+    switch(month) {
+        case 'January':
+            if(year%4 != 0) {
+                starting_day = (common_day-2);
+            }
+            else {
+                starting_day = (common_day-3);
+            }
+            end_date = 31;
+            break;
+        case 'February' :
+            if(year%4!=0) {
+                end_date = 28;
+                starting_day = (common_day-6);
+            }
+            else {
+                end_date = 29;
+                starting_day = (common_day)
+            }
+            break;
+        case 'March':
+            starting_day = (common_day-6);
+            end_date = 31;
+            break;
+        case 'April':
+            starting_day = (common_day-3);
+            end_date = 30;
+            break;
+        case 'May' :
+            starting_day = (common_day-1);
+            end_date = 31;
+            break;
+        case 'June':
+            starting_day = (common_day-5);
+            end_date = 30;
+            break;
+        case 'July':
+            starting_day = (common_day-3);
+            end_date = 31;
+            break;
+        case 'August' :
+            starting_day = (common_day);
+            end_date = 31;
+            break;
+        case 'September':
+            starting_day = (common_day-4);
+            end_date = 30;
+            break;
+        case 'October':
+            starting_day = (common_day-2);
+            end_date = 31;
+            break;
+        case 'November' :
+            starting_day = (common_day-6);
+            end_date = 30;
+            break;
+        case 'December':
+            starting_day = (common_day-4);
+            end_date = 31;
+            break;
+    }
+    if(starting_day < 0) {
+                starting_day+=7;
+            }
+    for (let i = 0; i<spots.length; i++) { //clearing everyting
+        document.getElementById(spots[i]).innerHTML = '';
+    }
+    let tracker = 0;
+    let last = document.getElementsByClassName('last');
+    let last2 = document.getElementsByClassName('last2')
+    for (let i = starting_day; i<spots.length; i++) {
+        tracker++;
+        if(tracker <= end_date) {
+            document.getElementById(spots[i]).innerHTML = tracker;
+            for(let i = 0; i<last.length; i++) {
+                last[i].style.display='block';
+                last2[i].style.display='block';
+            }
+        }
+    }
+    if (document.getElementById('spot35').innerHTML == '') { //don't display last week if its blank
+        for(let i = 0; i<last.length; i++) {
+            last[i].style.display='none'; 
+        }
+    }
+    if (document.getElementById('spot28').innerHTML == false) { //don't display if february does not fill next row, only happens feb 2026
+        for(let i = 0; i<last2.length; i++) {
+            last2[i].style.display='none'; 
+            console.log('in')
+        }
+    }
+    clear();
+}
+function clicked(id) {
+    if(document.getElementById(id).innerHTML != '') {
+        numberOfClicked++;
+        if(numberOfClicked == 1) {
+            date1 = document.getElementById(id);
+            date1.style.color = 'white';
+            date1.style.backgroundColor = '#337ACB';
+            date1info = [Number(year),monthNumber(month),date1.id.replace('spot', '')]
+            date1value = date1.innerHTML;
+            if(date1value < 10) {
+                date1value = '0'.concat(date1value)
+            }
+            if(monthNumber(month) < 10) {
+                date1sort = year+'0'+monthNumber(month)+date1value
+            } //adds the zero so that when we sort everything is aligned
+            else {
+                date1sort = year+monthNumber(month)+date1value
+            }
+            console.log(date1info)
+        }
+        if(numberOfClicked == 2) {
+            date2 = document.getElementById(id);
+            date2.style.color = 'white';
+            date2.style.backgroundColor = '#337ACB';
+            date2info = [Number(year), monthNumber(month), date2.id.replace('spot', '')]
+            date2value = date2.innerHTML;
+            if(date2value < 10) {
+                date2value = '0'.concat(date2value)
+            }
+            if(monthNumber(month) < 10) {
+                date2sort = year+'0'+monthNumber(month)+date2value
+            }
+            else {
+                date2sort = year+monthNumber(month)+date2value
+            }
+            console.log(date2info)
+            sortDates(date1sort, date2sort)
+            dataSaving(date1info, date2info)
+            console.log(date1value, date2value)
+        }
+    }
+    if(numberOfClicked == 3) {
+        clear();
+        monthData = [];
+        day1 = [];
+        day2 = [];
+        yearData = [];
+        numberOfClicked = 0;
+        startday = [];
+        endday = [];
+        date1value = 0;
+        date2value = 0;
+        sort_flag = 0;
+    }
+}
+function sortDates(date1sort, date2sort) { //sorts by days to see which ones first
+    let order = [date1sort, date2sort]
+    // console.log(order)
+    order = order.sort()
+    // console.log(order)
+    if(date1sort <= date2sort) {
+        console.log('1');
+        sort_flag = 1;
+    }
+    if(date2sort < date1sort) {
+        console.log('2');
+        sort_flag = 2;
+    }
+}
+
+function monthNumber(info) { //decodes the written values to 1-12
+    for (let i = 0; i<months.length; i++) {
+        if(months[i] == info) { 
+            return i
+        }
+    }
+}
+function dataSaving(date1info, date2info) {    //this is where we write the array for month savings
+    if(sort_flag == 1) {
+        begYear = date1info[0];
+        endYear = date2info[0];
+        sortedBegMonth = date1info[1];
+        sortedEndMonth = date2info[1];
+        sortedDay1info = date1info[2]; //dayXinfo helps sort the dateXinfo based on which date is earlier
+        sortedDay2info = date2info[2];
+        sortedStartDay = date1value;
+        sortedEndDay = date2value;
+    }
+    else if(sort_flag == 2) {
+        begYear = date2info[0];
+        endYear = date1info[0];
+        sortedBegMonth = date2info[1];
+        sortedEndMonth = date1info[1];
+        sortedDay1info = date2info[2];
+        sortedDay2info = date1info[2];
+        sortedStartDay = date2value;
+        sortedEndDay = date1value;
+    }
+    // console.log(begMonth);
+    // console.log(endMonth);
+    // console.log(begYear);
+    // console.log(endYear);
+    for (let j = begYear; j<endYear+1; j++) {
+        if(j == begYear) {
+            begMonth = sortedBegMonth
+            day1info = sortedDay1info
+        }
+        else {
+            begMonth = 0;
+            day1info = 0;
+        }
+        if(j == endYear) {
+            endMonth = sortedEndMonth;
+            day2info = sortedDay2info;
+        }
+        else {
+            endMonth = 11;
+            day2info = 41; 
+        }
+        for (let i = begMonth; i<endMonth+1; i++) {
+                monthData.push(i)
+                yearData.push(j)
+                if(i == begMonth) {
+                    day1.push(day1info)
+                    startday.push(sortedStartDay)
+                }
+                else {+
+                    day1.push(0)
+                }
+                if(i == endMonth) {
+                    day2.push(day2info)
+                    endday.push(sortedEndDay)
+                }
+                else {
+                    day2.push(41)
+                }
+        }
+    }
+    monthSavings()
+}
+
+function monthSavings() { //if month matches up then display data
+    console.log(yearData)
+    // console.log(Number(year-2000))
+    console.log(monthData)
+    console.log(day1)
+    console.log(day2)
+    console.log(startday)
+    console.log(endday)
+    // for(let j = 0; j<yearData.length; j++) {
+        for(let i = 0; i<monthData.length; i++) {
+            if(monthNumber(month) == monthData[i] && Number(year) == yearData[i]) {
+                console.log(monthNumber(month))
+                inbetween(day1[i], day2[i])
+                if(i == 0 && starting_day == 0) {
+                    document.getElementById(spots[day1[0]]).style.background = '#337ACB';
+                }
+            }
+        }
+    // }
+}
+
+function inbetween(spot1, spot2) { //highlights the variables inbetween given spots
+    console.log('inbetween')
+    for (let i = Math.min(spot1, spot2); i<Math.max(spot1, spot2)+1; i++) {
+        document.getElementById(spots[i]).style.color = 'white';
+        document.getElementById(spots[i]).style.background = 'rgba(51, 122, 203, 0.3)';
+    }
+    if(document.getElementById(spots[spot1]).innerHTML != false) {
+        document.getElementById(spots[spot1]).style.background = '#337ACB';
+        document.getElementById(spots[spot1]).style.color = 'white';
+    }
+    if(document.getElementById(spots[spot2]).innerHTML != false) {
+        document.getElementById(spots[spot2]).style.background = '#337ACB';
+        document.getElementById(spots[spot2]).style.color = 'white';
+    }
+    if(starting_day == 0 && monthData.length != 1 && day1[0] != 0) { //used to fix error when first day is a sunday and that is spot1
+        document.getElementById(spots[spot1]).style.background = 'rgba(51, 122, 203, 0.3)';
+    }
+
+}
+function clear() { //clears the calendar
+    for (let i = 0; i<spots.length; i++) {
+        document.getElementById(spots[i]).style.color = 'black';
+        document.getElementById(spots[i]).style.backgroundColor = '#efefef'
+    }
+}</script>
+</body></html>

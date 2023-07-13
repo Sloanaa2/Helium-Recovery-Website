@@ -1,0 +1,207 @@
+html {
+    width: 100%;
+}
+
+@font-face {
+    font-family: 'Source Sans Pro';
+    src: url(fonts/SourceSansPro-Regular.ttf) format('truetype');
+}
+
+body {
+    position: relative;
+    top: 50px;
+    background-color: #47a9fa50;
+    color: black; /* #13294B; */
+    font-family: 'Source Sans Pro';
+    font-size: 20px;
+    overflow: scroll;
+}
+
+h2 {
+    font-size: 28px;
+}
+
+nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    min-width: 100%;
+    background-color: #75bffb;
+    border-bottom: 1.5px solid #47a9fa;
+    overflow: hidden;
+    animation: fadein .05s linear;
+    z-index: 10000;
+    /*display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-decoration: none;*/
+}
+
+@keyframes fadein {
+    from { opacity: 0}
+    to   { opacity: 1}
+}
+
+
+nav a {
+    float: left;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: flex-start;
+    text-decoration: none;
+}
+
+nav a:hover {
+    background-color: #E8E9EB;
+    color: black;
+    animation: fadein .4s;
+    transition-duration:0.5s;
+}
+
+nav .active {
+  background-color: #47a9fab3;
+  color: white;
+}
+
+th, td, tr {
+  border: 1px solid black;
+  padding: 4px;
+  margin: auto;
+  /* background-color: #ffffff; */
+}
+
+table {
+  border: 1px solid black;
+}
+
+.container {
+    display: flex;
+    align-items: baseline;
+    gap: 1em;
+}
+
+.navbar {
+    display: flex;
+    justify-content:flex-start;
+    /*background-color: red;*/
+}
+
+#add {
+    border: none;
+    background: none;
+    color: gray;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+#add:hover {
+    color: black;
+    background-color:gray;
+    border-radius: 10px;
+}
+
+
+#I {
+    height: 40px;
+    width: 31.58px;
+    margin-top: 6.5px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.meter2 #xButton { /* X button in totals*/
+        margin-left:225px;
+}
+
+.item2 #xButton { /* X button in index/select*/
+        margin-left:125px;
+}
+
+#xButton {
+    border-radius: 100%;
+    background: none;
+    border-color: gray;
+    color:gray;
+}
+
+#xButton:hover {
+    background: gray;
+    color: black;
+}
+
+#csv {
+ margin-left: 200px;   
+}
+
+#csv2 {
+ margin-left: 250px;   
+}
+
+#select {
+       margin-top: 5px;
+    margin-bottom: 0px;
+}
+
+ion-icon {
+    margin-right: 5px;
+    margin-top: 3px;
+}
+
+.calendar {
+    background-color: white;
+    border-radius: 10px;
+    width: 500px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-around;
+}
+
+
+.arrows {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 100%;
+    font-size: 1.5em;
+}
+
+.arrows:hover {
+    background-color: gray;
+}
+h1 {
+    text-align: center;
+    font-size: 1.5em;
+}
+
+
+.days {
+    background-color: #efefef;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+}
+
+.dow{
+    background-color: lightblue;
+}
+.days p {
+    border: 2px solid black;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.date {
+    display: flex;
+    width: 150px;
+    justify-content: center;
+}
+#month {
+    margin-right: 5px;
+}
+#year {
+    margin-left: 5px
+}
